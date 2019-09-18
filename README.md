@@ -39,6 +39,16 @@ Global Flags:
   -d, --dry-run         Perform a dry-run of the application without mutating files
 ```
 
+#### Examples
+
+This is my personal template which results in timestamped images with the device that took them listed (if present in the EXIF data) and the
+original filename (commonly `DSC_0001`).
+
+```
+image-cleanup rename --template="{{ .DateTime }}{{ if .Model }}_{{ .Model }}{{ end }}_{{ .FileNameClean }}{{ .Extension }}" --target ./
+```
+
+
 ### `image-cleanup remove`
 Scans a candidate directory structure to identify which images should be removed from a target directory structure.
 
