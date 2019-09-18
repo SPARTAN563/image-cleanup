@@ -58,7 +58,7 @@ func init() {
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	rootCmd.PersistentFlags().BoolP("dry-run", "d", false, "Perform a dry-run of the application without mutating files")
+	rootCmd.PersistentFlags().BoolP("apply", "f", false, "Make changes to the files")
 }
 
 // initConfig reads in config file and ENV variables if set.

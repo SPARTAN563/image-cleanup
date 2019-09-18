@@ -46,7 +46,7 @@ var renameCmd = &cobra.Command{
 	Short: "Renames images in the tree based on a template which may use EXIF tag fields.",
 	Long:  `Scans a directory structure, extracting EXIF data for each image and renaming them according to a provided template function.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		dryRun, err := cmd.Root().PersistentFlags().GetBool("dry-run")
+		apply, err := cmd.Root().PersistentFlags().GetBool("apply")
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -74,7 +74,7 @@ var renameCmd = &cobra.Command{
 
 		log := logrus.WithFields(logrus.Fields{
 			"target":   target,
-			"dryRun":   dryRun,
+			"apply":    apply,
 			"template": filenameTemplate,
 		})
 
@@ -138,7 +138,7 @@ var renameCmd = &cobra.Command{
 			if path != filename.String() {
 				log.Info("Renaming file")
 				// Move the file
-				if !dryRun {
+				if apply {
 					if err := os.Rename(path, filename.String()); err != nil {
 						log.WithError(err).Error("Failed to rename file")
 					}

@@ -30,7 +30,7 @@ var removeCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		log := logrus.WithFields(logrus.Fields{})
 
-		dryRun, err := cmd.Root().PersistentFlags().GetBool("dry-run")
+		apply, err := cmd.Root().PersistentFlags().GetBool("apply")
 		if err != nil {
 			log.WithError(err).Error()
 			return
@@ -49,7 +49,7 @@ var removeCmd = &cobra.Command{
 		}
 
 		log = log.WithFields(logrus.Fields{
-			"dryRun":     dryRun,
+			"apply":      apply,
 			"target":     target,
 			"candidates": candidates,
 		})
@@ -110,7 +110,7 @@ var removeCmd = &cobra.Command{
 
 				if _, ok := removals[base]; ok {
 					log.Info("Removing file")
-					if !dryRun {
+					if apply {
 						if err := os.Remove(path); err != nil {
 							log.WithError(err).Error("Failed to remove file")
 						}
