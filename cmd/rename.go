@@ -40,6 +40,15 @@ func (f imageMetaFields) Walk(name exif.FieldName, tag *tiff.Tag) error {
 	return nil
 }
 
+func getCommonPrefix(a, b string) string {
+	i := 0
+	for i = 0; i < len(a) && i < len(b) && a[i] == b[i]; i++ {
+
+	}
+
+	return a[:i]
+}
+
 // renameCmd represents the rename command
 var renameCmd = &cobra.Command{
 	Use:   "rename",
@@ -133,10 +142,16 @@ var renameCmd = &cobra.Command{
 				return nil
 			}
 
-			log = log.WithField("newPath", filename.String())
+			prefix := getCommonPrefix(path, filename.String())
+
+			log = logrus.WithField("newPath", filename.String())
+			shortlog := logrus.WithFields(logrus.Fields{
+				"old": path[len(prefix):],
+				"new": filename.String()[len(prefix):],
+			})
 
 			if path != filename.String() {
-				log.Info("Renaming file")
+				shortlog.Info("Renaming file")
 				// Move the file
 				if apply {
 					if err := os.Rename(path, filename.String()); err != nil {
@@ -144,7 +159,7 @@ var renameCmd = &cobra.Command{
 					}
 				}
 			} else {
-				log.Debug("Skipping file, no change necessary")
+				shortlog.Debug("Skipping file, no change necessary")
 			}
 
 			return nil

@@ -14,8 +14,16 @@
 
 package main
 
-import "github.com/spartan563/image-cleanup/cmd"
+import (
+	"os"
+
+	"github.com/shiena/ansicolor"
+	log "github.com/sirupsen/logrus"
+	"github.com/spartan563/image-cleanup/cmd"
+)
 
 func main() {
+	log.SetFormatter(&log.TextFormatter{ForceColors: true})
+	log.SetOutput(ansicolor.NewAnsiColorWriter(os.Stdout))
 	cmd.Execute()
 }
